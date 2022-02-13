@@ -20,7 +20,7 @@ from pytorch_ssim import SSIM as pytorch_ssim
 
 
 # Training settings
-parser = argparse.ArgumentParser(description='PyTorch Super Res Example')
+parser = argparse.ArgumentParser(description='PyTorch See360 virtual scene training code')
 parser.add_argument('--upscale_factor', type=int, default=1, help="super resolution upscale factor")
 parser.add_argument('--batchSize', type=int, default=8, help='training batch size')
 parser.add_argument('--pretrained_iter', type=int, default=1000, help='number of epochs to train for')
@@ -32,7 +32,7 @@ parser.add_argument('--gpu_mode', type=bool, default=True)
 parser.add_argument('--threads', type=int, default=6, help='number of threads for data loader to use')
 parser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')
 parser.add_argument('--gpus', default=2, type=int, help='number of gpu')
-parser.add_argument('--data_dir', type=str, default='/home/liuzhisong/data/Archinterior_2')
+parser.add_argument('--data_dir', type=str, default='./data/Archinterior360')
 parser.add_argument('--data_augmentation', type=bool, default=True)
 parser.add_argument('--patch_size', type=int, default=128, help='Size of cropped LR image')
 parser.add_argument('--pretrained_G', default='UrbanCity/GAN_generator_1000.pth', help='sr pretrained base model')
@@ -104,11 +104,9 @@ def train(epoch):
 
         G_optimizer.zero_grad()
 
-        # eps = torch.rand(input.shape[0], 1, input.shape[2], input.shape[3]).cuda(gpus_list[0])
         predict = G(left_img, right_img, code)
 
-        # pre_feat = VGG(predict * 0.5 + 0.5)
-        # tar_feat = VGG(target_img * 0.5 + 0.5)
+
         PD = torch.mean(PD_loss(predict * 0.5 + 0.5, target_img * 0.5 + 0.5))
 
         D_fake_feat, D_fake_decision = D(predict, mask_img, left_img, right_img)
@@ -116,19 +114,11 @@ def train(epoch):
 
         GAN_loss = L1_loss(D_fake_decision, real_label)
 
-        recon_loss = lap_loss(predict, target_img) #+ lap_loss(pre_mask, mask_img)
-        # a = (predict - left_img) * 0.5 + 0.5
-        # b = (predict - right_img) * 0.5 + 0.5
-        # c = (target_img - left_img) * 0.5 + 0.5
-        # d = (target_img - right_img) * 0.5 + 0.5
-        ssim_loss = 1 - ssim(predict, target_img) #- ssim(pre_mask, mask_img)
-        # recon_loss = lap_loss(predict, target_img)
-        # mask_loss = lap_loss(pre_mask, mask_img)
+        recon_loss = lap_loss(predict, target_img) 
+
+        ssim_loss = 1 - ssim(predict, target_img) 
+
         GAN_feat_loss = L1_loss(D_real_feat.detach(), D_fake_feat)
-        # smooth_loss = TV_loss(predict)
-        # VGG_loss = sum([vgg_weights[i] * L1_loss(pre_feat[i], tar_feat[i].detach()) for i in
-        #                   range(len(tar_feat))])
-        # KL_loss = torch.sum(KL)
 
         G_loss = 1*recon_loss + 1*ssim_loss + 1*PD + 1*GAN_loss + 1*GAN_feat_loss
 
@@ -146,12 +136,7 @@ def train(epoch):
 
         real = real_label * np.random.uniform(0.7, 1.2)
         fake = fake_label + np.random.uniform(0.0, 0.3)
-        # if np.random.random() < 0.5:
-        #     real = real_label
-        #     fake = fake_label
-        # else:
-        #     real = fake_label
-        #     fake = real_label
+
 
         Dis_loss = (L1_loss(D_real_decision, real)
                     + L1_loss(D_fake_decision, fake)) / 2.0
@@ -167,12 +152,6 @@ def train(epoch):
         adv_epoch_loss += (GAN_loss.data)
         recon_epoch_loss += (recon_loss.data)
 
-        # writer.add_scalars('Train_Loss', {'G_loss': G_loss.data,
-        #                                   'D_loss': D_loss.data,
-        #                                   'Adv_loss': GAN_loss.data,
-        #                                   'Recon_loss': recon_loss.data,
-        #                                   'VGG_loss': vgg_loss.data
-        #                                   }, epoch, iteration)
         print(
             "===> Epoch[{}]({}/{}): G_loss: {:.4f} || D_loss: {:.4f} "
             "|| Adv: {:.4f} || Recon_Loss: {:.4f} || ssim_loss: {:.4f}"
@@ -263,24 +242,6 @@ if opt.pretrained:
         print('Pre-trained Discriminator model is loaded.')
 
 
-# model_minc = os.path.join(opt.save_folder + 'VGG16minc_53.pth')
-# if os.path.exists(model_minc):
-#     MINC.load_state_dict(torch.load(model_minc, map_location=lambda storage, loc: storage))
-#     for param in MINC.parameters():
-#         param.requires_grad = False
-#     print('MINC model is loaded!')
-#
-# MINC = torch.nn.DataParallel(MINC)
-
-# model_vgg = os.path.join(opt.save_folder + 'vgg_conv.pth')
-# if os.path.exists(model_vgg):
-#     VGG.load_state_dict(torch.load(model_vgg, map_location=lambda storage, loc: storage))
-#     for param in VGG.parameters():
-#         param.requires_grad = False
-#     print('VGG model is loaded!')
-#
-# VGG = torch.nn.DataParallel(VGG)
-
 
 if cuda:
     G = G.cuda(gpus_list[0])
@@ -298,17 +259,9 @@ G_optimizer = optim.Adam(G.parameters(), lr=opt.lr, betas=(0.5, 0.999), eps=1e-8
 D_optimizer = optim.Adam(D.parameters(), lr=opt.lr, betas=(0.5, 0.999), eps=1e-8)
 
 
-# writer = SummaryWriter(opt.log_folder)
+
 for epoch in range(opt.start_iter, opt.nEpochs + 1):
     train(epoch)
-
-    # if (epoch + 1) % 10 == 0:
-    #     for param_group in G_optimizer.param_groups:
-    #         param_group['lr'] /= 5.0
-    #     print('G: Learning rate decay: lr={}'.format(G_optimizer.param_groups[0]['lr']))
-    #     for param_group in D_optimizer.param_groups:
-    #         param_group['lr'] /= 5.0
-    #     print('D: Learning rate decay: lr={}'.format(D_optimizer.param_groups[0]['lr']))
 
     if epoch % (opt.snapshots) == 0:
         checkpoint(epoch)
