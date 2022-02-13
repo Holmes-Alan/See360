@@ -13,7 +13,7 @@ from torch.utils.data import DataLoader
 from modules import generator_final_v2, discriminator_v2, PDLoss
 from transformer_net import VGG19
 import numpy as np
-from data import get_training_set
+from data import get_training_set_real
 import torch.nn.functional as F
 import socket
 from pytorch_ssim import SSIM as pytorch_ssim
@@ -190,7 +190,7 @@ if cuda:
     torch.cuda.manual_seed(opt.seed)
 
 print('===> Loading datasets')
-train_set = get_training_set(opt.data_dir, opt.data_augmentation)
+train_set = get_training_set_real(opt.data_dir, opt.data_augmentation)
 training_data_loader = DataLoader(dataset=train_set, num_workers=opt.threads, batch_size=opt.batchSize, shuffle=True)
 
 print('===> Building model')
