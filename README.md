@@ -20,6 +20,11 @@ Please check our [paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumbe
   pages={1-1},
   doi={10.1109/TIP.2022.3148819}}
   
+# Demo
+We show four examples of real-world and virtual-world view rendering.
+![eg1](/figures/hunghom_our.gif)
+![eg2](/figures/lab_our.gif)
+
 # For proposed See360 model, we claim the following points:
 
 • To generate high-quality, photo-realistic images without requiring 3D information, we propose a Multi-Scale Affine Transformer (MSAT) to render reference views in the feature domain using 2D affine transformation. Instead of learning one-shot affine transform to reference views, we learn multiple affine transforms in a coarseto-fine manner to match the reference features for view synthesis.
