@@ -22,8 +22,9 @@ Please check our [paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumbe
   
 # Demo
 We show four examples of real-world and virtual-world view rendering.
-![eg1](/figures/hunghom_our.gif)
-![eg2](/figures/lab_our.gif)
+
+![eg1](/figures/hunghom_our.gif)  ![eg2](/figures/lab_our.gif)
+![eg3](/figures/archinterior_our.gif)  ![eg4](/figures/urbancity_our.gif) 
 
 # For proposed See360 model, we claim the following points:
 
