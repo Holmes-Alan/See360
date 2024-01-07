@@ -19,6 +19,15 @@ Please check our [paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumbe
   number={},
   pages={1-1},
   doi={10.1109/TIP.2022.3148819}}
+
+        @InProceedings{Liu2022see360,
+            author = {Liu, Zhi-Song and Cani, Marie-Paule and Siu Wan-Chi},
+            title = {See360: Novel Panoramic View interpolation},
+            booktitle = {IEEE Transactions on Image Processing},
+            year = {2022},
+            pages={1857-1869},
+            doi={10.1109/TIP.2022.3148819}
+        }
   
 # Demo
 We show four examples of real-world and virtual-world view rendering.
