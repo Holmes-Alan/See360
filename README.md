@@ -51,4 +51,4 @@ and Archinterior360. Another is the real 360 images collected from real-world in
 # Complete Architecture
 The complete architecture is shown as follows,
 
-![network](/figure/figure1.png)
+![network](/figures/network.png)
