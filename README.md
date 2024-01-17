@@ -10,15 +10,6 @@ Please check our [paper]([https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumb
 
 # BibTex
 
-@ARTICLE{9709215,
-  author={Liu, Zhi-Song and Cani, Marie-Paule and Siu, Wan-Chi},
-  journal={IEEE Transactions on Image Processing}, 
-  title={See360: Novel Panoramic View interpolation}, 
-  year={2022},
-  volume={},
-  number={},
-  pages={1-1},
-  doi={10.1109/TIP.2022.3148819}}
 
         @InProceedings{Liu2022see360,
             author = {Liu, Zhi-Song and Cani, Marie-Paule and Siu Wan-Chi},
