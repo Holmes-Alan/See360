@@ -6,7 +6,7 @@ This repo only provides simple testing codes, pretrained models and the network 
 
 We present See360, which is a versatile and efficient framework for 360-degree panoramic view interpolation using latent space viewpoint estimation.
 
-Please check our [paper]([https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9709215](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9709215))
+Please check our [paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9709215)
 
 # BibTex
 
